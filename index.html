@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>OmniCalc · premium tool suite</title>
+  <!-- Fonts & Icons: clean geometric Apple-like style -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f5f5f7;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    /* main container – premium glass card */
+    .tool-hub {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(35px);
+      -webkit-backdrop-filter: blur(35px);
+      background: linear-gradient(135deg, rgba(255,255,255,0.82) 0%, rgba(250,250,250,0.78) 100%);
+      border-radius: 3.2rem;
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.08), 0 10px 30px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.9);
+      padding: 2.5rem 2.3rem 2.8rem;
+      border: 1px solid rgba(255,255,255,0.6);
+      margin-bottom: 1.5rem;
+    }
+
+    /* header */
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      background: #1d1d1f;
+      color: #f5f5f7;
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: linear-gradient(145deg, #2c2c2e, #1c1c1e);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .logo-text {
+      font-weight: 620;
+      font-size: 2rem;
+      letter-spacing: -0.6px;
+      color: #1d1d1f;
+    }
+    .logo-text span {
+      font-weight: 400;
+      color: #86868b;
+    }
+
+    .search-mini {
+      background: rgba(240,240,244,0.7);
+      backdrop-filter: blur(15px);
+      border-radius: 2.5rem;
+      padding: 0.6rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      color: #6e6e73;
+      font-size: 0.9rem;
+    }
+
+    /* Category grid – matching screenshot layout */
+    .categories-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+      margin: 1.8rem 0 2rem;
+    }
+
+    .category-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .cat-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.2px;
+      color: #1d1d1f;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-left: 0.2rem;
+    }
+
+    .cat-title i {
+      color: #86868b;
+      font-size: 0.9rem;
+    }
+
+    .tools-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.8rem;
+    }
+
+    .tool-card {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 1.6rem;
+      padding: 1rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.02);
+      color: #1d1d1f;
+      font-weight: 500;
+      font-size: 0.9rem;
+      letter-spacing: -0.2px;
+      text-decoration: none;
+    }
+
+    .tool-card i {
+      font-size: 1.1rem;
+      color: #3a3a3c;
+      width: 22px;
+      text-align: center;
+    }
+
+    .tool-card:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: rgba(0,0,0,0.08);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.04);
+      transform: translateY(-1px);
+    }
+
+    /* active calculator panel (embedded tool) */
+    .active-calc-panel {
+      margin-top: 2.5rem;
+      background: rgba(250,250,252,0.7);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 2.5rem;
+      padding: 1.8rem 1.8rem 2rem;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.02), 0 10px 25px rgba(0,0,0,0.04);
+    }
+
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .calc-header h3 {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #1d1d1f;
+    }
+
+    .display-area {
+      background: rgba(240,240,244,0.6);
+      border-radius: 2rem;
+      padding: 1.3rem 1.8rem;
+      margin-bottom: 1.3rem;
+      text-align: right;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .expression {
+      font-size: 1rem;
+      color: #86868b;
+      min-height: 1.4rem;
+    }
+    .result-large {
+      font-size: 3rem;
+      font-weight: 590;
+      color: #1d1d1f;
+      line-height: 1.2;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.7rem;
+    }
+
+    .calc-btn {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 2rem;
+      aspect-ratio: 1;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #1d1d1f;
+      cursor: pointer;
+      transition: 0.12s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.03);
+    }
+    .calc-btn.operator {
+      background: #ff9f0a;
+      color: white;
+      font-weight: 600;
+      border: 1px solid rgba(255,180,60,0.5);
+    }
+    .calc-btn.equals {
+      background: #1d1d1f;
+      color: white;
+    }
+    .zero-btn {
+      grid-column: span 2;
+      aspect-ratio: auto;
+      border-radius: 2.5rem;
+      justify-content: flex-start;
+      padding-left: 1.8rem;
+    }
+
+    footer {
+      color: #86868b;
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 650px) {
+      .tool-hub {
+        padding: 1.8rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="tool-hub">
+    <div class="brand-row">
+      <div class="logo">
+        <div class="logo-icon"><i class="fas fa-cube"></i></div>
+        <div class="logo-text">Omni<span>Calc</span></div>
+      </div>
+      <div class="search-mini">
+        <i class="fas fa-search"></i> <span>find tools...</span>
+      </div>
+    </div>
+
+    <!-- Main categories exactly like screenshot: Financial, Fitness, Math, Other -->
+    <div class="categories-grid" id="categoriesContainer">
+      <!-- Dynamically filled from JS, but also static for clarity -->
+    </div>
+
+    <!-- Embedded active calculator (default: Scientific / Basic) -->
+    <div class="active-calc-panel" id="activeCalculator">
+      <div class="calc-header">
+        <h3 id="activeCalcTitle"><i class="fas fa-calculator"></i> Scientific Calculator</h3>
+        <span style="color:#86868b;"><i class="far fa-clock"></i></span>
+      </div>
+      <div class="display-area">
+        <div class="expression" id="calcExpression"></div>
+        <div class="result-large" id="calcResult">0</div>
+      </div>
+      <div class="btn-grid" id="calcButtonsGrid"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 1rem; gap: 0.8rem;">
+        <button class="calc-btn" style="aspect-ratio: auto; padding: 0 1.5rem; border-radius: 2rem;" id="clearActiveBtn">AC</button>
+      </div>
+    </div>
+  </div>
+  <footer><i class="far fa-dot-circle"></i> OmniCalc · premium tool suite</footer>
+
+  <script>
+    (function() {
+      // --- Tool catalog same as screenshot ---
+      const toolCategories = [
+        {
+          name: "Financial Calculators",
+          icon: "fa-solid fa-chart-line",
+          tools: [
+            "Mortgage Calculator", "Loan Calculator", "Auto Loan Calculator", "Interest Calculator",
+            "Payment Calculator", "Retirement Calculator", "Amortization Calculator", "Investment Calculator",
+            "Inflation Calculator", "Finance Calculator", "Income Tax Calculator", "Compound Interest Calculator",
+            "Salary Calculator", "Interest Rate Calculator", "Sales Tax Calculator"
+          ]
+        },
+        {
+          name: "Fitness & Health Calculators",
+          icon: "fa-solid fa-heart-pulse",
+          tools: [
+            "BMI Calculator", "Calorie Calculator", "Body Fat Calculator", "BMR Calculator",
+            "Ideal Weight Calculator", "Pace Calculator", "Pregnancy Calculator", "Pregnancy Conception Calculator",
+            "Due Date Calculator"
+          ]
+        },
+        {
+          name: "Math Calculators",
+          icon: "fa-solid fa-square-root-variable",
+          tools: [
+            "Scientific Calculator", "Fraction Calculator", "Percentage Calculator", "Random Number Generator",
+            "Triangle Calculator", "Standard Deviation Calculator"
+          ]
+        },
+        {
+          name: "Other Calculators",
+          icon: "fa-solid fa-ellipsis",
+          tools: [
+            "Age Calculator", "Date Calculator", "Time Calculator", "Hours Calculator",
+            "GPA Calculator", "Grade Calculator", "Concrete Calculator", "Subnet Calculator",
+            "Password Generator", "Conversion Calculator"
+          ]
+        }
+      ];
+
+      // Render category grid
+      const container = document.getElementById('categoriesContainer');
+      function renderCategories() {
+        if (!container) return;
+        container.innerHTML = '';
+        toolCategories.forEach(cat => {
+          const section = document.createElement('div');
+          section.className = 'category-section';
+          section.innerHTML = `
+            <div class="cat-title"><i class="${cat.icon}"></i> ${cat.name}</div>
+            <div class="tools-row">
+              ${cat.tools.map(tool => `
+                <div class="tool-card" data-tool="${tool}">
+                  <i class="fas fa-${getToolIcon(tool)}"></i> ${tool}
+                </div>
+              `).join('')}
+            </div>
+          `;
+          container.appendChild(section);
+        });
+
+        // Attach click events to tool cards
+        document.querySelectorAll('.tool-card').forEach(card => {
+          card.addEventListener('click', function(e) {
+            const toolName = this.getAttribute('data-tool');
+            if (toolName) activateTool(toolName);
+          });
+        });
+      }
+
+      function getToolIcon(tool) {
+        if (tool.includes('Mortgage')) return 'home';
+        if (tool.includes('Loan') || tool.includes('Finance')) return 'money-bill-wave';
+        if (tool.includes('BMI') || tool.includes('Body')) return 'weight-scale';
+        if (tool.includes('Calorie')) return 'fire';
+        if (tool.includes('Pace')) return 'person-running';
+        if (tool.includes('Pregnancy') || tool.includes('Due')) return 'baby';
+        if (tool.includes('Scientific')) return 'calculator';
+        if (tool.includes('Fraction')) return 'divide';
+        if (tool.includes('Random')) return 'dice';
+        if (tool.includes('Triangle')) return 'draw-polygon';
+        if (tool.includes('Age') || tool.includes('Date')) return 'calendar';
+        if (tool.includes('Time') || tool.includes('Hours')) return 'clock';
+        if (tool.includes('GPA') || tool.includes('Grade')) return 'graduation-cap';
+        if (tool.includes('Password')) return 'lock';
+        if (tool.includes('Conversion')) return 'exchange-alt';
+        return 'circle';
+      }
+
+      // --- Active embedded calculator logic (Scientific / basic) ---
+      const calcExpression = document.getElementById('calcExpression');
+      const calcResult = document.getElementById('calcResult');
+      const calcButtonsGrid = document.getElementById('calcButtonsGrid');
+      const activeCalcTitle = document.getElementById('activeCalcTitle');
+
+      let currentOperand = '0';
+      let previousOperand = '';
+      let operation = null;
+      let resetScreen = false;
+
+      function updateCalcDisplay() {
+        if (calcExpression) {
+          let expr = previousOperand ? previousOperand : '';
+          if (operation) expr += ` ${getOpSymbol(operation)}`;
+          calcExpression.textContent = expr;
+        }
+        if (calcResult) {
+          let display = currentOperand;
+          if (display.length > 10 && display.includes('.')) {
+            const num = parseFloat(display);
+            if (!isNaN(num)) display = num.toPrecision(9).replace(/\.?0+$/, '');
+          }
+          calcResult.textContent = display;
+        }
+      }
+
+      function getOpSymbol(op) {
+        if (op === 'add') return '+';
+        if (op === 'subtract') return '−';
+        if (op === 'multiply') return '×';
+        if (op === 'divide') return '÷';
+        return '';
+      }
+
+      function appendNumber(num) {
+        if (resetScreen) {
+          currentOperand = '';
+          resetScreen = false;
+        }
+        if (currentOperand === '0' && num !== '0') currentOperand = num;
+        else if (currentOperand === '0' && num === '0') return;
+        else currentOperand += num;
+        updateCalcDisplay();
+      }
+
+      function appendDecimal() {
+        if (resetScreen) {
+          currentOperand = '0';
+          resetScreen = false;
+        }
+        if (!currentOperand.includes('.')) currentOperand += '.';
+        updateCalcDisplay();
+      }
+
+      function chooseOp(op) {
+        if (operation !== null && !resetScreen) compute();
+        if (currentOperand === '') return;
+        previousOperand = currentOperand;
+        operation = op;
+        resetScreen = true;
+        updateCalcDisplay();
+      }
+
+      function compute() {
+        if (operation === null || resetScreen) return;
+        const prev = parseFloat(previousOperand);
+        const current = parseFloat(currentOperand);
+        if (isNaN(prev) || isNaN(current)) return;
+        let result;
+        switch (operation) {
+          case 'add': result = prev + current; break;
+          case 'subtract': result = prev - current; break;
+          case 'multiply': result = prev * current; break;
+          case 'divide': 
+            if (current === 0) { alert('Cannot divide by zero'); clearCalc(); return; }
+            result = prev / current; break;
+          default: return;
+        }
+        result = Math.round((result + Number.EPSILON) * 100000000) / 100000000;
+        currentOperand = result.toString();
+        operation = null;
+        previousOperand = '';
+        resetScreen = true;
+        updateCalcDisplay();
+      }
+
+      function clearCalc() {
+        currentOperand = '0';
+        previousOperand = '';
+        operation = null;
+        resetScreen = false;
+        updateCalcDisplay();
+      }
+
+      function toggleSign() {
+        if (currentOperand === '0') return;
+        currentOperand = currentOperand.startsWith('-') ? currentOperand.slice(1) : '-' + currentOperand;
+        updateCalcDisplay();
+      }
+
+      function percent() {
+        let val = parseFloat(currentOperand);
+        if (isNaN(val)) return;
+        currentOperand = (val / 100).toString();
+        updateCalcDisplay();
+      }
+
+      function buildCalcButtons() {
+        if (!calcButtonsGrid) return;
+        const buttons = [
+          { text: 'AC', class: 'func', action: clearCalc },
+          { text: '±', class: 'func', action: toggleSign },
+          { text: '%', class: 'func', action: percent },
+          { text: '÷', class: 'operator', action: () => chooseOp('divide') },
+          { text: '7', action: () => appendNumber('7') },
+          { text: '8', action: () => appendNumber('8') },
+          { text: '9', action: () => appendNumber('9') },
+          { text: '×', class: 'operator', action: () => chooseOp('multiply') },
+          { text: '4', action: () => appendNumber('4') },
+          { text: '5', action: () => appendNumber('5') },
+          { text: '6', action: () => appendNumber('6') },
+          { text: '−', class: 'operator', action: () => chooseOp('subtract') },
+          { text: '1', action: () => appendNumber('1') },
+          { text: '2', action: () => appendNumber('2') },
+          { text: '3', action: () => appendNumber('3') },
+          { text: '+', class: 'operator', action: () => chooseOp('add') },
+          { text: '0', class: 'zero', action: () => appendNumber('0') },
+          { text: '.', action: appendDecimal },
+          { text: '=', class: 'equals', action: compute }
+        ];
+
+        calcButtonsGrid.innerHTML = '';
+        buttons.forEach(btn => {
+          const button = document.createElement('button');
+          button.className = 'calc-btn';
+          if (btn.class) button.classList.add(btn.class);
+          if (btn.text === '0') button.classList.add('zero-btn');
+          button.textContent = btn.text;
+          button.addEventListener('click', btn.action);
+          calcButtonsGrid.appendChild(button);
+        });
+
+        document.getElementById('clearActiveBtn')?.addEventListener('click', clearCalc);
+      }
+
+      function activateTool(toolName) {
+        if (activeCalcTitle) {
+          activeCalcTitle.innerHTML = `<i class="fas fa-calculator"></i> ${toolName}`;
+        }
+        // For most tools we keep the same calculator, but it's functional.
+        // Special quick calculator mappings:
+        if (toolName.includes('BMI')) {
+          alert('BMI Calculator: weight(kg)/height(m)². Use the numeric calculator to compute.');
+        } else if (toolName.includes('Mortgage') || toolName.includes('Loan')) {
+          alert('Financial tool ready: Enter values and use operations.');
+        }
+        // Reset calculator for new tool context
+        clearCalc();
+      }
+
+      // Keyboard support
+      window.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9') { e.preventDefault(); appendNumber(e.key); }
+        else if (e.key === '.') { e.preventDefault(); appendDecimal(); }
+        else if (e.key === '+') { e.preventDefault(); chooseOp('add'); }
+        else if (e.key === '-') { e.preventDefault(); chooseOp('subtract'); }
+        else if (e.key === '*') { e.preventDefault(); chooseOp('multiply'); }
+        else if (e.key === '/') { e.preventDefault(); chooseOp('divide'); }
+        else if (e.key === 'Enter') { e.preventDefault(); compute(); }
+        else if (e.key === 'Escape') { e.preventDefault(); clearCalc(); }
+        else if (e.key === '%') { e.preventDefault(); percent(); }
+        else if (e.key === 'Backspace') {
+          e.preventDefault();
+          if (currentOperand.length > 1) currentOperand = currentOperand.slice(0, -1);
+          else currentOperand = '0';
+          updateCalcDisplay();
+        }
+      });
+
+      // Initialize everything
+      renderCategories();
+      buildCalcButtons();
+      updateCalcDisplay();
+
+      // Set default active tool
+      activateTool('Scientific Calculator');
+    })();
+  </script>
+</body>
+</html>
